@@ -20,7 +20,7 @@ y = f(x)
 path = pathlib.Path("results")
 path.mkdir(exist_ok=True)
 
-csvfile="1 x y \n"
+csvfile="N x y \n"
 for i in range(0, len(x)):
     csvfile+= str(i)+", " +str(x[i])+ ', '  +str(y[i])+"\n"
 
