@@ -63,7 +63,7 @@ if __name__ == '__main__':
     dx = 1e-3
 
     # Скорость обновления графика поля
-    speed_refresh = 100
+    speed_refresh = 50
 
     # Параметры среды
     # Диэлектрическая проницаемость
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     # Массивы для Ez и Hy
     Ez = numpy.zeros(maxSize)
     Hy = numpy.zeros(maxSize - 1)
-    source = GaussianDiffPlaneWave(30.0, 10.0, Sc, eps, mu)
+    source = GaussianDiffPlaneWave(30.0, 12.0, Sc, eps, mu)
 
 
     # Sc' для правой границы
@@ -137,13 +137,13 @@ if __name__ == '__main__':
     display.drawProbes(probesPos)
     display.drawSources([sourcePos])
 
-    for t in range(maxTime):
+    for q in range(maxTime):
         # Расчет компоненты поля H
         Hy = Hy + (Ez[1:] - Ez[:-1]) * Sc / (W0 * mu)
 
         # Источник возбуждения с использованием метода
         # Total Field / Scattered Field
-        Hy[sourcePos - 1] -= Sc / (W0 * mu) * source.getE(0, t)
+        Hy[sourcePos - 1] -= Sc / (W0 * mu) * source.getE(0, q)
 
         # Расчет компоненты поля E
         Hy_shift = Hy[:-1]
@@ -152,7 +152,7 @@ if __name__ == '__main__':
         # Источник возбуждения с использованием метода
         # Total Field / Scattered Field
         Ez[sourcePos] += (Sc / (numpy.sqrt(eps * mu)) *
-                          source.getE(-0.5, t + 0.5))
+                          source.getE(-0.5, q + 0.5))
         # Граничные условия ABC второй степени (слева)
         Ez[0] = 0
 
@@ -168,8 +168,8 @@ if __name__ == '__main__':
         for probe in probes:
             probe.addData(Ez, Hy)
 
-        if t % speed_refresh == 0:
-            display.updateData(display_field, t)
+        if q % speed_refresh == 0:
+            display.updateData(display_field, q)
 
     display.stop()
 
